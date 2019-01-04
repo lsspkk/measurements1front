@@ -1,10 +1,13 @@
 # measurements1front
 
-Vue App Front for Measurements, uses https://vuematerial.io/
+Front for Measurements, uses 
+https://vuematerial.io/ 
+https://cli.vuejs.org/
+Vue version 2
 
 ### TODO
 
-x   navigation
+-   OK: navigation
 -   settings
     - add/remove quantity
     - remove measurement
