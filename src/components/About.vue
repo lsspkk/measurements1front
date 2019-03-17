@@ -1,7 +1,7 @@
 <template>
   <div>
     <md-content>
-    <h1>{{ msg }}</h1>
+    <h1>Measurements, versio 1.0</h1>
     </md-content>
     <md-content >
           <img src="../assets/logo.png">
@@ -16,7 +16,7 @@
     </md-content>
     <md-content>
     <div>
-    <h3>Installed CLI Plugins</h3>
+    <h3>Mittaa mitä vaan haluat!</h3>
     <ul>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
@@ -29,9 +29,7 @@
 <script>
 
 export default {
-  name: 'HelloWorld',
   props: {
-    msg: String,
     user: String
   }
 }
