@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <md-card>
+    <md-card-header>{{ measure.name }} : {{ measure.value }}</md-card-header>
     <input
       type="range"
       :min="measure.min"
@@ -7,13 +8,18 @@
       v-bind:value="measure.value"
       @input="$emit('input', $event.target.value)"
     >
-    {{ measure.name }} : {{ measure.value }}
-  </div>
+  </md-card>
 </template>
 
 <script>
 export default {
-  props: [ 'measure' ]
-}
+  props: ["measure"]
+};
 </script>
+
+<style lang="css" scoped>
+.md-card {
+  margin: 10px 0;
+}
+</style>
 
