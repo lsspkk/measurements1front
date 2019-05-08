@@ -13,14 +13,18 @@
       ></mea-slider>
 
       <md-toolbar>
-        <md-button class="md-raised md-primary" @click="saveMeasures()">Talleta</md-button>
+        <md-button class="md-raised md-primary" @click="saveData()">Talleta</md-button>
       </md-toolbar>
       <md-toolbar md-elevation="0" v-if="saved.length > 0">
+        <p v-for="(i,s) in saved" :key="'saved'+i">{{s}}</p>
         <md-list style="flex:1">
           <md-list-item>Talletettu {{ saved[0].timestamp | formatDate }}</md-list-item>
           <md-list-item :key="i +'_'+m.name" v-for="(m,i) in saved">{{ m.name }}, {{ m.value}}</md-list-item>
         </md-list>
       </md-toolbar>
+    </md-content>
+    <md-content v-if="errors" class="md-accent">
+      <p v-for="(e,i) in errors" :key="'error'+i">{{e}}</p>
     </md-content>
   </div>
 </template>
@@ -45,7 +49,8 @@ export default {
   data() {
     return {
       measures: [],
-      saved: {}
+      saved: [],
+      errors: []
     };
   },
   mounted() {
@@ -53,24 +58,28 @@ export default {
   },
   methods: {
     loadMeasures() {
-      let data = Repository.getMeasures();
-      data.forEach(m => {
-        m["value"] = (m.max - m.min) / 2;
+      Repository.getMeasures().then(data =>{
+        data.forEach(m => {
+          m["value"] = (m.max - m.min) / 2;
+        });
+        this.measures = data;
       });
-      this.measures = data;
     },
-    saveMeasures() {
+    saveData() {
       let timestamp = new Date().toISOString();
+      var promises = [];
+      var responses = this.saved = [];
+      var errors = this.errors = [];
       let data = this.measures.map(m => {
-        return {
-          id: m.id,
-          name: m.name,
-          value: m.value,
-          timestamp: timestamp
-        };
+        promises.push(
+          Repository.putData(m.id, m.value, timestamp)
+          .then(res => responses.push(res)
+          .catch(error => {
+            console.log(error)
+            errors.push(error)
+            })));
       });
-      this.saved = data;
-      this.loadMeasures();
+      Promise.all(promises).then(this.loadMeasures());
     }
   }
 };

@@ -15,7 +15,11 @@ import Home from './components/Home.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
-axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.withCredentials = true
+axios.defaults.headers.put['Content-Type'] = 'application/json'
+axios.defaults.headers.post['Content-Type'] = 'application/json'
+axios.defaults.baseURL = 'http://192.168.99.100:3000'
+//axios.defaults.baseURL = 'http://localhost:3000'
 
 // Vue.use(MdButton)
 // Vue.use(MdContent)

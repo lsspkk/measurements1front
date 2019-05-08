@@ -53,31 +53,48 @@ export default {
     };
   },
   mounted() {
+    
     this.loadStatistics();
-    this.showChart();
   },
   methods: {
     loadStatistics() {
-      let data = Repository.getMeasures();
-      data.forEach(m => {
-        m["values"] = Repository.getData(m.id);
-      });
-      this.data = data;
+      var promises = []
+      var measureCall = Repository.getMeasures();
+      promises.push(measureCall);
+      measureCall.then(result => {
+        result.forEach(m => {
+          var dataCall = Repository.getData(m.id);
+          promises.push(dataCall);
+          dataCall.then(values => {
+            m["values"] = values;
+          })
+        })
+        Promise.all(promises).then(mv => this.showChart(mv[0]));
+      })
     },
-    showChart() {
+    async loadMeasures() {
+      let result = await Repository.getMeasures();
+      return result;
+    },
+    async loadValues(id) {
+      return await Repository.getData(id);
+    },
+    showChart(mv) {
+      this.data = mv;
+      console.log(this.data)
       var colors = ["#ad6", "#a6d", "#6ad"];
       var datasets = [];
-      this.data.forEach(measure => {
+      for(var i=0; i < mv.length; i++ ) {
+        var measure = mv[i];
         datasets.push({
           label: measure.name,
           borderColor: colors[0],
-          backgroundColor: "transparent",
-          data: measure.values.map(v => {
-            return { x: v.timestamp, y: v.value };
-          })
+          data: measure.values.map(v => ({ x:v.timestamp, y:v.value}))
         });
+          
         colors.splice(0, 1);
-      });
+      }
+      console.log(datasets );
       this.chartdata = { datasets: datasets };
     }
   }
