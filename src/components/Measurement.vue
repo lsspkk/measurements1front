@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     loadMeasures() {
-      Repository.getMeasures().then(data =>{
+      Repository.getMeasures().then(data => {
         data.forEach(m => {
           m["value"] = (m.max - m.min) / 2;
         });
@@ -68,16 +68,17 @@ export default {
     saveData() {
       let timestamp = new Date().toISOString();
       var promises = [];
-      var responses = this.saved = [];
-      var errors = this.errors = [];
+      var responses = (this.saved = []);
+      var errors = (this.errors = []);
       let data = this.measures.map(m => {
         promises.push(
-          Repository.putData(m.id, m.value, timestamp)
-          .then(res => responses.push(res)
-          .catch(error => {
-            console.log(error)
-            errors.push(error)
-            })));
+          Repository.postData(m.id, m.value, timestamp).then(res =>
+            responses.push(res).catch(error => {
+              console.log(error);
+              errors.push(error);
+            })
+          )
+        );
       });
       Promise.all(promises).then(this.loadMeasures());
     }

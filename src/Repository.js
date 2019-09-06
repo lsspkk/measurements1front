@@ -48,11 +48,11 @@ export default {
       return res.data
     })
   },
-
-  putData(measureId, value, timestamp) {
+  
+  postData(measureId, value, timestamp) {
     return axios({
       url: '/measurement/' + measureId,
-      method: 'put',
+      method: 'post',
       data: { value: value, timestamp: timestamp },
       withCredentials: true
     })
