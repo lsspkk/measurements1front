@@ -89,7 +89,7 @@ export default {
         "/about": "Info",
         "/measurement": "Mittaus",
         "/statistics": "Tilastot",
-        "/sroups": "Ryhmät",
+        "/groups": "Ryhmät",
         "/settings": "Asetukset"
       }
       this.title = text[to.path]
